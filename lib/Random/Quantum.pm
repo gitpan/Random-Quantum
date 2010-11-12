@@ -1,6 +1,6 @@
 package Random::Quantum;
 BEGIN {
-  $Random::Quantum::VERSION = '0.01';
+  $Random::Quantum::VERSION = '0.02';
 }
 use Moose;
 use IO::Socket::INET;
@@ -66,6 +66,12 @@ has 'bytes' => (
     isa => 'Any'
 );
 
+has 'cache_size' => (
+    is => 'rw',
+    isa => 'Int',
+    default => 4096
+);
+
 sub int1 {
     ord(shift->chunk(1));
 }
@@ -101,11 +107,11 @@ sub chunk {
         $data = substr($self->request(4096), 0, $size);
     } else {
         if ($self->available < $size) {
-            $self->request(4096);
+            $self->request($self->cache_size);
         }
         $data = substr($self->bytes, 0, $size);
-        $self->available($self->available - 1);
-        $self->bytes(substr($self->bytes, 1));
+        $self->available($self->available - $size);
+        $self->bytes(substr($self->bytes, $size));
     }
     return $data;
 }
@@ -157,7 +163,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Random::Quantum - Get fundamentally random numbers using QRBGS(Quantum Random Bit Generator Service)
+Random::Quantum - Get fundamentally random numbers using QRBGS ( Quantum Random Bit Generator Service http://random.irb.hr/ )
 
 =head1 SYNOPSIS
 
@@ -206,6 +212,16 @@ Last error
 Returns bits
 
 =head1 Links
+
+=head1 CONFIG
+
+=head2 use_cache => 0|1
+
+Cache service answer. Default: 1
+
+=head2 cache_size => 1..unknown
+
+Size of cache. Default: 4096. Approximate maximum: 64000
 
 L<Quantum Random Bit Generator Service|<a href="http://random.irb.hr/">random.irb.hr</a>>
 

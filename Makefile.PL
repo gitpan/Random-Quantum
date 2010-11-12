@@ -23,7 +23,7 @@ my %WriteMakefileArgs = (
     'IO::Socket::INET' => '0',
     'Moose' => '0'
   },
-  'VERSION' => '0.01',
+  'VERSION' => '0.02',
   'test' => {
     'TESTS' => ''
   }
