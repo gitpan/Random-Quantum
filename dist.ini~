@@ -1,6 +1,6 @@
 name    = Random-Quantum
 author  = Egor Korablev <egor.korablev@gmail.com>
-version = 0.03
+version = 0.02
 license = Perl_5
 copyright_holder = Egor Korablev <egor.korablev@gmail.com>
 copyright_year   = 2010

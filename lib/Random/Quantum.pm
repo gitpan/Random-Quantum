@@ -1,6 +1,6 @@
 package Random::Quantum;
 BEGIN {
-  $Random::Quantum::VERSION = '0.02';
+  $Random::Quantum::VERSION = '0.03';
 }
 use Moose;
 use IO::Socket::INET;
@@ -123,7 +123,7 @@ sub request {
     my $client = IO::Socket::INET->new(
         PeerAddr  => $self->host,
         PeerPort => $self->port,
-    );
+    ) || die $!;
     my $s = chr(0).pack("n",length($self->user)+length($self->password)+6).
 			chr(length($self->user)).
 			$self->user.
@@ -133,7 +133,7 @@ sub request {
     print $client $s;
     my $data;
     $client->recv($data, 6);
-    my @fields = unpack("BBL!", $data);
+    my @fields = unpack("BBN", $data);
     if ($fields[0] != 0) {
         close $client;
         $self->error($fields[0], $fields[1]);
@@ -141,6 +141,7 @@ sub request {
     }
     $data = '';
     $client->recv($data, $fields[2]);
+
     $self->bytes($data);
     $self->available(length($self->bytes));
     $self->status('Recieved:'.$self->available);
@@ -221,7 +222,7 @@ Cache service answer. Default: 1
 
 =head2 cache_size => 1..unknown
 
-Size of cache. Default: 4096. Approximate maximum: 64000
+Size of cache. Default: 4096.
 
 L<Quantum Random Bit Generator Service|<a href="http://random.irb.hr/">random.irb.hr</a>>
 
