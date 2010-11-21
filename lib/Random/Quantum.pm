@@ -1,6 +1,6 @@
 package Random::Quantum;
 BEGIN {
-  $Random::Quantum::VERSION = '0.03';
+  $Random::Quantum::VERSION = '0.04';
 }
 use Moose;
 use IO::Socket::INET;
@@ -81,19 +81,19 @@ sub signed_int1 {
 }
 
 sub int2 {
-    (unpack("S!", shift->chunk(2)))[0];
+    (unpack("S", shift->chunk(2)))[0];
 }
 
 sub signed_int2 {
-    (unpack("s!", shift->chunk(2)))[0]
+    (unpack("s", shift->chunk(2)))[0]
 }
 
 sub int4 {
-    (unpack("L!", shift->chunk(4)))[0];
+    (unpack("L", shift->chunk(4)))[0];
 }
 
 sub signed_int4 {
-    (unpack("l!", shift->chunk(4)))[0];
+    (unpack("l", shift->chunk(4)))[0];
 }
 
 sub float {

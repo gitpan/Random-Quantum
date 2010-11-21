@@ -15,4 +15,4 @@ name: Random-Quantum
 requires:
   IO::Socket::INET: 0
   Moose: 0
-version: 0.03
+version: 0.04
